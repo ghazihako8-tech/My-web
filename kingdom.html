@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحالف MBS 82 — منصة الفيديوهات الرسمية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   RESET & VARIABLES
+   ========================================================= */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#e50914;
+  --red-2:#ff1f2e;
+  --red-3:#ff4d5a;
+  --red-deep:#8b0009;
+  --red-glow:rgba(229,9,20,.55);
+  --red-soft:rgba(229,9,20,.12);
+  --bg:#050505;
+  --bg-2:#0a0a0a;
+  --card:rgba(18,18,18,.72);
+  --card-solid:#121212;
+  --border:rgba(255,255,255,.08);
+  --border-red:rgba(229,9,20,.35);
+  --text:#f7f7f7;
+  --muted:#8f8f8f;
+  --radius:20px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Cairo',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.65;
+  position:relative;
+}
+
+/* ============ ANIMATED BACKGROUND ============ */
+.bg-fx{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+.bg-fx::before{
+  content:'';
+  position:absolute;inset:-50%;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(229,9,20,.22), transparent 35%),
+    radial-gradient(circle at 85% 30%, rgba(229,9,20,.15), transparent 40%),
+    radial-gradient(circle at 50% 90%, rgba(139,0,9,.18), transparent 45%);
+  animation:bgFloat 18s ease-in-out infinite;
+}
+@keyframes bgFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-3%,3%) scale(1.08)}
+}
+.bg-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(229,9,20,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(229,9,20,.045) 1px, transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse at center, #000 10%, transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse at center, #000 10%, transparent 75%);
+  animation:gridMove 40s linear infinite;
+}
+@keyframes gridMove{
+  0%{background-position:0 0}
+  100%{background-position:56px 56px}
+}
+.scanline{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 0%,rgba(229,9,20,.035) 50%,transparent 100%);
+  height:20%;
+  animation:scan 9s linear infinite;
+  pointer-events:none;
+}
+@keyframes scan{
+  0%{transform:translateY(-100%)}
+  100%{transform:translateY(600%)}
+}
+
+/* ============ SELECTION & SCROLLBAR ============ */
+::selection{background:var(--red);color:#fff}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:#080808}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--red),var(--red-deep));border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:var(--red-2)}
+
+/* ============ HEADER ============ */
+header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(5,5,5,.72);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  border-bottom:1px solid var(--border);
+  transition:.3s;
+}
+header::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+  opacity:.6;
+}
+.nav{
+  max-width:1340px;margin:0 auto;
+  padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.logo{
+  display:flex;align-items:center;gap:12px;
+  cursor:pointer;user-select:none;
+}
+.logo-mark{
+  width:46px;height:46px;border-radius:13px;
+  background:linear-gradient(135deg,var(--red) 0%,var(--red-deep) 100%);
+  display:grid;place-items:center;
+  position:relative;
+  box-shadow:
+    0 0 24px var(--red-glow),
+    inset 0 1px 0 rgba(255,255,255,.18);
+  overflow:hidden;
+}
+.logo-mark::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);
+  animation:shine 3.5s ease-in-out infinite;
+}
+@keyframes shine{
+  0%,100%{transform:translateX(-150%)}
+  50%{transform:translateX(150%)}
+}
+.logo-mark svg{width:24px;height:24px;fill:#fff;position:relative;z-index:1}
+.logo-text{
+  display:flex;flex-direction:column;line-height:1.05;
+}
+.logo-text .main{
+  font-family:'Orbitron',sans-serif;
+  font-weight:900;font-size:1.3rem;letter-spacing:.5px;
+  background:linear-gradient(135deg,#fff 20%,var(--red-3) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.logo-text .sub{
+  font-size:.68rem;color:var(--muted);font-weight:600;letter-spacing:1px;
+}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a{
+  color:var(--muted);text-decoration:none;font-weight:700;font-size:.9rem;
+  padding:9px 16px;border-radius:11px;transition:.25s;position:relative;
+}
+.nav-links a:hover{color:#fff;background:rgba(229,9,20,.10)}
+.nav-links a::after{
+  content:'';position:absolute;bottom:5px;left:50%;transform:translateX(-50%) scaleX(0);
+  width:20px;height:2px;background:var(--red);border-radius:2px;transition:.25s;
+}
+.nav-links a:hover::after{transform:translateX(-50%) scaleX(1)}
+
+.btn-admin{
+  display:flex;align-items:center;gap:9px;
+  background:linear-gradient(135deg,var(--red) 0%,var(--red-deep) 100%);
+  color:#fff;border:none;cursor:pointer;
+  padding:11px 22px;border-radius:12px;
+  font-family:inherit;font-weight:800;font-size:.88rem;
+  transition:.3s cubic-bezier(.2,.8,.3,1.2);
+  box-shadow:
+    0 4px 18px rgba(229,9,20,.35),
+    inset 0 1px 0 rgba(255,255,255,.18);
+  position:relative;overflow:hidden;
+}
+.btn-admin::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at center,rgba(255,255,255,.25),transparent 70%);
+  opacity:0;transition:.3s;
+}
+.btn-admin:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 32px var(--red-glow),inset 0 1px 0 rgba(255,255,255,.25);
+}
+.btn-admin:hover::before{opacity:1}
+.btn-admin.on{
+  background:linear-gradient(135deg,#2a2a2a,#161616);
+  box-shadow:0 4px 18px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);
+  border:1px solid var(--border-red);
+}
+
+/* ============ HERO ============ */
+.hero{
+  position:relative;z-index:2;
+  max-width:1340px;margin:0 auto;
+  padding:80px 24px 50px;text-align:center;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:9px;
+  background:rgba(229,9,20,.08);
+  border:1px solid var(--border-red);
+  color:var(--red-3);
+  padding:8px 20px;border-radius:100px;
+  font-size:.78rem;font-weight:800;margin-bottom:26px;
+  letter-spacing:.5px;position:relative;
+  backdrop-filter:blur(10px);
+  animation:badgeIn .8s ease both;
+}
+@keyframes badgeIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+.badge .dot{
+  width:8px;height:8px;border-radius:50%;background:var(--red);
+  box-shadow:0 0 12px var(--red);animation:pulse 1.6s infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.35;transform:scale(.7)}
+}
+.hero h1{
+  font-size:clamp(2.1rem,6vw,4.2rem);
+  font-weight:900;line-height:1.15;letter-spacing:-1.5px;
+  margin-bottom:20px;animation:heroIn 1s .1s ease both;
+}
+@keyframes heroIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.hero h1 .grad{
+  background:linear-gradient(135deg,var(--red-2) 0%,var(--red-3) 50%,#ff8b96 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  position:relative;
+  filter:drop-shadow(0 0 30px rgba(229,9,20,.4));
+}
+.hero h1 .brand{
+  font-family:'Orbitron',sans-serif;
+  display:block;
+  font-size:.42em;letter-spacing:3px;
+  color:var(--muted);margin-bottom:8px;font-weight:700;
+  background:none;-webkit-text-fill-color:var(--muted);
+}
+.hero p{
+  color:var(--muted);font-size:clamp(.95rem,2.2vw,1.15rem);
+  max-width:660px;margin:0 auto 38px;
+  animation:heroIn 1s .2s ease both;
+}
+.hero-cta{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  animation:heroIn 1s .3s ease both;margin-bottom:44px;
+}
+.btn-hero{
+  padding:14px 30px;border-radius:14px;font-weight:800;font-size:.95rem;
+  cursor:pointer;border:none;font-family:inherit;transition:.3s;
+  display:inline-flex;align-items:center;gap:10px;text-decoration:none;
+}
+.btn-hero.primary{
+  background:linear-gradient(135deg,var(--red),var(--red-deep));
+  color:#fff;
+  box-shadow:0 8px 26px rgba(229,9,20,.4),inset 0 1px 0 rgba(255,255,255,.2);
+}
+.btn-hero.primary:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 14px 40px var(--red-glow),inset 0 1px 0 rgba(255,255,255,.25);
+}
+.btn-hero.ghost{
+  background:rgba(255,255,255,.04);
+  color:#ddd;border:1px solid var(--border);
+  backdrop-filter:blur(10px);
+}
+.btn-hero.ghost:hover{
+  background:rgba(255,255,255,.08);color:#fff;
+  border-color:var(--border-red);transform:translateY(-3px);
+}
+
+/* ============ STATS ============ */
+.stats{
+  display:flex;justify-content:center;gap:16px;flex-wrap:wrap;
+  animation:heroIn 1s .4s ease both;
+}
+.stat{
+  background:linear-gradient(160deg,rgba(30,30,30,.6),rgba(12,12,12,.6));
+  border:1px solid var(--border);
+  border-radius:16px;padding:18px 30px;min-width:140px;
+  backdrop-filter:blur(14px);
+  position:relative;overflow:hidden;
+  transition:.3s;
+}
+.stat::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+  opacity:.7;
+}
+.stat:hover{
+  transform:translateY(-4px);
+  border-color:var(--border-red);
+  box-shadow:0 12px 34px rgba(0,0,0,.6),0 0 0 1px var(--border-red);
+}
+.stat b{
+  display:block;font-size:2rem;font-weight:900;
+  background:linear-gradient(135deg,#fff,var(--red-3));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  line-height:1.1;
+}
+.stat small{color:var(--muted);font-size:.78rem;font-weight:700;letter-spacing:.3px}
+
+/* ============ TOOLBAR ============ */
+.toolbar{
+  position:relative;z-index:2;
+  max-width:1340px;margin:0 auto;
+  padding:16px 24px 28px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.section-title{
+  font-size:1.3rem;font-weight:900;display:flex;align-items:center;gap:12px;
+  margin-inline-end:auto;
+}
+.section-title::before{
+  content:'';width:5px;height:26px;border-radius:5px;
+  background:linear-gradient(180deg,var(--red-2),var(--red-deep));
+  box-shadow:0 0 16px var(--red-glow);
+}
+.search{
+  position:relative;flex:0 1 340px;min-width:210px;
+}
+.search input{
+  width:100%;
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:13px 46px 13px 16px;
+  color:var(--text);font-family:inherit;font-size:.9rem;
+  outline:none;transition:.3s;
+  backdrop-filter:blur(10px);
+}
+.search input:focus{
+  border-color:var(--red);
+  background:rgba(229,9,20,.06);
+  box-shadow:0 0 0 4px rgba(229,9,20,.12),0 0 24px rgba(229,9,20,.15);
+}
+.search input::placeholder{color:#5f5f5f}
+.search svg{
+  position:absolute;inset-inline-start:15px;top:50%;transform:translateY(-50%);
+  width:18px;height:18px;stroke:#666;pointer-events:none;transition:.3s;
+}
+.search input:focus ~ svg{stroke:var(--red-2)}
+.filter{
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--border);
+  border-radius:13px;padding:13px 18px;
+  color:var(--text);font-family:inherit;font-size:.9rem;font-weight:600;
+  outline:none;cursor:pointer;transition:.3s;
+  backdrop-filter:blur(10px);
+}
+.filter:hover{border-color:var(--border-red)}
+.filter:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(229,9,20,.12)}
+.filter option{background:#141414}
+
+/* ============ GRID ============ */
+.grid-wrap{position:relative;z-index:2;max-width:1340px;margin:0 auto;padding:0 24px 90px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:26px;
+}
+.card{
+  background:linear-gradient(165deg,rgba(24,24,24,.85),rgba(12,12,12,.85));
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:.45s cubic-bezier(.2,.8,.3,1);
+  animation:fadeUp .55s ease both;
+  backdrop-filter:blur(14px);
+  position:relative;
+}
+.card::before{
+  content:'';position:absolute;inset:0;border-radius:var(--radius);
+  padding:1px;
+  background:linear-gradient(135deg,transparent 40%,rgba(229,9,20,.4),transparent 60%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:.4s;pointer-events:none;
+}
+.card:hover::before{opacity:1}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.card:hover{
+  transform:translateY(-8px);
+  border-color:var(--border-red);
+  box-shadow:
+    0 22px 60px rgba(0,0,0,.7),
+    0 0 40px rgba(229,9,20,.12);
+}
+.thumb{
+  position:relative;aspect-ratio:16/9;overflow:hidden;
+  background:linear-gradient(135deg,#1a1a1a,#0a0a0a);
+  display:grid;place-items:center;
+}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:.7s cubic-bezier(.2,.8,.3,1)}
+.card:hover .thumb img{transform:scale(1.09)}
+.thumb .ph{font-size:3rem;opacity:.15;filter:grayscale(1)}
+.thumb::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 35%,rgba(0,0,0,.9));
+  pointer-events:none;
+}
+.play-badge{
+  position:absolute;inset:0;margin:auto;
+  width:62px;height:62px;border-radius:50%;
+  background:linear-gradient(135deg,var(--red-2),var(--red-deep));
+  display:grid;place-items:center;
+  opacity:0;transform:scale(.6) rotate(-30deg);
+  transition:.4s cubic-bezier(.2,.9,.3,1.3);z-index:2;
+  box-shadow:0 10px 34px rgba(229,9,20,.6),inset 0 1px 0 rgba(255,255,255,.25);
+  cursor:pointer;border:none;color:#fff;
+}
+.play-badge svg{width:22px;height:22px;fill:#fff;margin-inline-start:3px}
+.card:hover .play-badge{opacity:1;transform:scale(1) rotate(0)}
+.play-badge:hover{transform:scale(1.12)!important}
+.cat-tag{
+  position:absolute;top:14px;inset-inline-start:14px;z-index:2;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(10px);
+  border:1px solid var(--border-red);
+  color:var(--red-3);
+  padding:5px 14px;border-radius:100px;
+  font-size:.72rem;font-weight:800;letter-spacing:.3px;
+}
+.dur{
+  position:absolute;bottom:14px;inset-inline-end:14px;z-index:2;
+  background:rgba(0,0,0,.78);color:#e0e0e0;
+  padding:4px 11px;border-radius:8px;font-size:.72rem;font-weight:700;
+  backdrop-filter:blur(6px);
+}
+.card-body{padding:18px;display:flex;flex-direction:column;gap:11px;flex:1}
+.card-body h3{
+  font-size:1.05rem;font-weight:800;line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;transition:.3s;
+}
+.card:hover .card-body h3{color:var(--red-3)}
+.card-body p{
+  color:var(--muted);font-size:.84rem;line-height:1.65;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;min-height:2.7em;
+}
+.meta{
+  display:flex;gap:16px;color:#666;font-size:.76rem;font-weight:700;
+  padding-top:4px;
+}
+.meta span{display:flex;align-items:center;gap:6px}
+.actions{display:flex;gap:9px;margin-top:auto;padding-top:8px}
+.btn{
+  font-family:inherit;font-weight:800;font-size:.84rem;
+  border:none;border-radius:11px;cursor:pointer;
+  padding:12px 15px;transition:.3s cubic-bezier(.2,.8,.3,1);
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  white-space:nowrap;position:relative;overflow:hidden;
+}
+.btn-dl{
+  flex:1;
+  background:linear-gradient(135deg,var(--red),var(--red-deep));
+  color:#fff;
+  box-shadow:0 5px 18px rgba(229,9,20,.32),inset 0 1px 0 rgba(255,255,255,.18);
+}
+.btn-dl:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 28px var(--red-glow),inset 0 1px 0 rgba(255,255,255,.25);
+}
+.btn-dl:active{transform:scale(.97)}
+.btn-ghost{
+  background:rgba(255,255,255,.05);
+  color:#ccc;border:1px solid var(--border);
+}
+.btn-ghost:hover{background:rgba(255,255,255,.1);color:#fff;border-color:var(--border-red)}
+.btn-del{
+  background:rgba(229,9,20,.12);
+  color:var(--red-3);
+  border:1px solid rgba(229,9,20,.3);
+  padding:12px 14px;
+}
+.btn-del:hover{background:var(--red);color:#fff;box-shadow:0 6px 22px var(--red-glow)}
+
+/* ============ EMPTY ============ */
+.empty{
+  text-align:center;padding:90px 20px;color:var(--muted);
+  border:2px dashed rgba(255,255,255,.08);
+  border-radius:var(--radius);
+  background:rgba(255,255,255,.015);
+}
+.empty .ico{font-size:4rem;margin-bottom:18px;opacity:.3;filter:grayscale(1)}
+.empty h3{color:#ddd;font-size:1.2rem;margin-bottom:10px;font-weight:800}
+
+/* ============ MODAL ============ */
+.modal{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.86);
+  backdrop-filter:blur(12px);
+  display:none;align-items:center;justify-content:center;
+  padding:20px;overflow-y:auto;
+}
+.modal.open{display:flex;animation:fadeIn .22s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{
+  background:linear-gradient(165deg,#161616,#0c0c0c);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:24px;
+  width:100%;max-width:640px;
+  max-height:92vh;overflow-y:auto;
+  padding:34px;
+  position:relative;
+  box-shadow:0 34px 100px rgba(0,0,0,.9),0 0 0 1px rgba(229,9,20,.08);
+  animation:pop .32s cubic-bezier(.2,.9,.3,1.2);
+}
+.modal-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+  border-radius:24px 24px 0 0;
+}
+@keyframes pop{from{opacity:0;transform:scale(.93) translateY(18px)}to{opacity:1;transform:none}}
+.modal-box.wide{max-width:820px}
+.close-x{
+  position:absolute;top:20px;inset-inline-end:20px;
+  width:38px;height:38px;border-radius:11px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  color:#999;cursor:pointer;font-size:1.05rem;
+  display:grid;place-items:center;transition:.25s;
+  font-family:inherit;
+}
+.close-x:hover{background:var(--red);color:#fff;border-color:var(--red);transform:rotate(90deg)}
+
+.modal-head{text-align:center;margin-bottom:30px}
+.modal-head .ic{
+  width:70px;height:70px;border-radius:20px;margin:0 auto 18px;
+  background:linear-gradient(135deg,var(--red),var(--red-deep));
+  display:grid;place-items:center;font-size:1.9rem;
+  box-shadow:0 14px 40px var(--red-glow),inset 0 1px 0 rgba(255,255,255,.2);
+  position:relative;overflow:hidden;
+}
+.modal-head .ic::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.3) 50%,transparent 70%);
+  animation:shine 3s ease-in-out infinite;
+}
+.modal-head h2{font-size:1.45rem;font-weight:900;margin-bottom:8px}
+.modal-head p{color:var(--muted);font-size:.88rem}
+
+/* ============ FORM ============ */
+.field{margin-bottom:18px}
+.field label{
+  display:block;font-size:.84rem;font-weight:800;
+  margin-bottom:8px;color:#cdcdcd;
+}
+.field label .req{color:var(--red-3)}
+.input, .textarea, .select{
+  width:100%;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:14px 16px;
+  color:var(--text);font-family:inherit;font-size:.9rem;
+  outline:none;transition:.3s;
+}
+.textarea{resize:vertical;min-height:92px;line-height:1.65}
+.input:focus,.textarea:focus,.select:focus{
+  border-color:var(--red);
+  background:rgba(229,9,20,.05);
+  box-shadow:0 0 0 4px rgba(229,9,20,.12),0 0 20px rgba(229,9,20,.1);
+}
+.input::placeholder,.textarea::placeholder{color:#5a5a5a}
+.select option{background:#161616}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:560px){.row{grid-template-columns:1fr}}
+
+.tabs{
+  display:flex;gap:6px;background:rgba(255,255,255,.04);
+  padding:5px;border-radius:13px;border:1px solid var(--border);
+  margin-bottom:16px;
+}
+.tab{
+  flex:1;padding:11px;border-radius:10px;border:none;
+  background:transparent;color:var(--muted);
+  font-family:inherit;font-weight:800;font-size:.85rem;
+  cursor:pointer;transition:.28s;
+}
+.tab:hover{color:#ddd}
+.tab.active{
+  background:linear-gradient(135deg,var(--red),var(--red-deep));
+  color:#fff;
+  box-shadow:0 5px 18px rgba(229,9,20,.35),inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.file-drop{
+  border:2px dashed rgba(255,255,255,.14);
+  border-radius:16px;padding:30px 20px;text-align:center;
+  cursor:pointer;transition:.3s;background:rgba(255,255,255,.02);
+}
+.file-drop:hover,.file-drop.drag{
+  border-color:var(--red);
+  background:rgba(229,9,20,.07);
+  box-shadow:0 0 0 4px rgba(229,9,20,.08);
+}
+.file-drop .ico{font-size:2.4rem;margin-bottom:10px;opacity:.65}
+.file-drop b{display:block;font-size:.92rem;margin-bottom:5px;font-weight:800}
+.file-drop small{color:var(--muted);font-size:.78rem}
+.file-name{
+  margin-top:12px;font-size:.82rem;color:var(--red-3);font-weight:800;
+  word-break:break-all;
+}
+
+.btn-submit{
+  width:100%;padding:16px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,var(--red),var(--red-deep));
+  color:#fff;font-family:inherit;font-weight:900;font-size:.95rem;
+  cursor:pointer;transition:.3s;margin-top:8px;
+  box-shadow:0 8px 26px rgba(229,9,20,.35),inset 0 1px 0 rgba(255,255,255,.2);
+}
+.btn-submit:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 38px var(--red-glow),inset 0 1px 0 rgba(255,255,255,.25);
+}
+.btn-submit:active{transform:scale(.98)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+/* ============ ADMIN LIST ============ */
+.admin-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;margin-bottom:20px;
+}
+.admin-bar h2{font-size:1.15rem;font-weight:900}
+.pill{
+  background:rgba(229,9,20,.12);color:var(--red-3);
+  border:1px solid var(--border-red);
+  padding:6px 16px;border-radius:100px;
+  font-size:.76rem;font-weight:800;
+}
+.mini-list{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.mini{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border);
+  border-radius:14px;padding:12px;
+  transition:.28s;
+}
+.mini:hover{
+  border-color:var(--border-red);
+  background:rgba(229,9,20,.04);
+}
+.mini .mthumb{
+  width:76px;height:48px;border-radius:10px;object-fit:cover;
+  background:#1e1e1e;flex-shrink:0;
+  display:grid;place-items:center;font-size:1.2rem;opacity:.6;
+}
+.mini .info{flex:1;min-width:0}
+.mini .info b{
+  display:block;font-size:.88rem;font-weight:800;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mini .info small{color:var(--muted);font-size:.75rem;font-weight:600}
+.mini .del{
+  background:rgba(229,9,20,.12);color:var(--red-3);
+  border:1px solid rgba(229,9,20,.3);
+  width:38px;height:38px;border-radius:11px;
+  cursor:pointer;font-size:1rem;transition:.28s;flex-shrink:0;
+  font-family:inherit;
+}
+.mini .del:hover{background:var(--red);color:#fff;box-shadow:0 6px 20px var(--red-glow)}
+
+/* ============ PLAYER ============ */
+.player-box{
+  width:100%;max-width:940px;
+  background:#0d0d0d;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:22px;overflow:hidden;
+  box-shadow:0 34px 100px rgba(0,0,0,.92),0 0 0 1px rgba(229,9,20,.1);
+  animation:pop .32s cubic-bezier(.2,.9,.3,1.2);
+}
+.player-box video{width:100%;display:block;max-height:70vh;background:#000}
+.player-info{padding:24px 28px}
+.player-info h3{font-size:1.15rem;font-weight:900;margin-bottom:8px}
+.player-info p{color:var(--muted);font-size:.86rem;margin-bottom:18px;line-height:1.65}
+
+/* ============ TOAST ============ */
+.toasts{
+  position:fixed;bottom:26px;inset-inline-start:26px;z-index:400;
+  display:flex;flex-direction:column;gap:12px;
+}
+.toast{
+  background:linear-gradient(165deg,#1c1c1c,#121212);
+  border:1px solid var(--border);
+  border-inline-start:4px solid var(--red);
+  border-radius:14px;
+  padding:14px 22px;
+  font-size:.87rem;font-weight:700;
+  box-shadow:0 16px 44px rgba(0,0,0,.8);
+  animation:slideIn .35s cubic-bezier(.2,.9,.3,1.2);
+  max-width:340px;
+  backdrop-filter:blur(12px);
+}
+.toast.ok{border-inline-start-color:#22c55e}
+.toast.err{border-inline-start-color:#ef4444}
+@keyframes slideIn{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:none}}
+
+/* ============ FOOTER ============ */
+footer{
+  position:relative;z-index:2;
+  border-top:1px solid var(--border);
+  padding:44px 24px 34px;text-align:center;
+  background:linear-gradient(180deg,transparent,rgba(229,9,20,.03));
+}
+footer .brand{
+  font-family:'Orbitron',sans-serif;
+  font-size:1.1rem;font-weight:900;letter-spacing:2px;
+  margin-bottom:14px;
+  background:linear-gradient(135deg,#fff,var(--red-3));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+footer p{color:#5a5a5a;font-size:.84rem;margin-bottom:6px}
+footer .company{
+  color:var(--muted);font-size:.82rem;font-weight:700;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 20px;border-radius:100px;
+  background:rgba(229,9,20,.06);
+  border:1px solid var(--border-red);
+  margin-top:14px;
+}
+footer .company b{
+  color:var(--red-3);font-weight:900;letter-spacing:1px;
+}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:768px){
+  .nav{padding:13px 18px}
+  .nav-links{display:none}
+  .logo-text .main{font-size:1.1rem}
+  .logo-mark{width:40px;height:40px}
+  .hero{padding:50px 18px 30px}
+  .toolbar,.grid-wrap{padding-inline:18px}
+  .modal-box{padding:24px;border-radius:20px}
+  .toasts{inset-inline:18px;bottom:18px}
+  .toast{max-width:none}
+  .stats{gap:10px}
+  .stat{padding:14px 22px;min-width:110px}
+  .stat b{font-size:1.5rem}
+  .player-info{padding:18px}
+  footer{padding:34px 18px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ ANIMATED BACKGROUND ============ -->
+<div class="bg-fx">
+  <div class="bg-grid"></div>
+  <div class="scanline"></div>
+</div>
+
+<!-- ================= HEADER ================= -->
+<header>
+  <nav class="nav">
+    <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div class="logo-text">
+        <span class="main">MBS 82</span>
+        <span class="sub">تحالف — ALLIANCE</span>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a href="#videos">الفيديوهات</a>
+      <a href="#videos">الأحدث</a>
+      <a href="#" onclick="scrollToFooter(event)">تواصل</a>
+    </div>
+    <button class="btn-admin" id="adminBtn" onclick="openAdmin()">
+      <span>⚙️</span> <span id="adminBtnText">لوحة الأدمن</span>
+    </button>
+  </nav>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="badge"><span class="dot"></span> المنصة الرسمية لتحالف MBS 82</div>
+  <h1>
+    <span class="brand">MBS 82 ALLIANCE</span>
+    منصة MBS82 لجلد <span class="grad">احذر سروالك ينزل</span>
+  </h1>
+  <p>منصة خاصة بتحالف فالهالا 81 يتم نشر فيها فيديوهات العروش خاصة بالتحالف او تصفير قلاع .</p>
+  <div class="hero-cta">
+    <a href="#videos" class="btn-hero primary">🎬 استعرض الفيديوهات</a>
+    <a href="#" onclick="scrollToFooter(event)" class="btn-hero ghost">ℹ️ عن المنصة</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><b id="statVideos">0</b><small>فيديو متاح</small></div>
+    <div class="stat"><b id="statDownloads">0</b><small>عملية تحميل</small></div>
+    <div class="stat"><b>HD</b><small>جودة عالية</small></div>
+    <div class="stat"><b>24/7</b><small>متاح دائماً</small></div>
+  </div>
+</section>
+
+<!-- ================= TOOLBAR ================= -->
+<div class="toolbar" id="videos">
+  <div class="section-title">مكتبة الفيديوهات</div>
+  <div class="search">
+    <input type="text" id="search" placeholder="ابحث عن فيديو..." oninput="render()">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path>
+    </svg>
+  </div>
+  <select class="filter" id="catFilter" onchange="render()">
+    <option value="">كل التصنيفات</option>
+  </select>
+</div>
+
+<!-- ================= GRID ================= -->
+<div class="grid-wrap">
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">
+    <div class="ico">🎬</div>
+    <h3>لا توجد فيديوهات بعد</h3>
+    <p>سيتم نشر المحتوى قريباً من قِبل الأدمن</p>
+  </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer id="footer">
+  <div class="brand">MBS 82 ALLIANCE</div>
+  <p>© 2025 جميع الحقوق محفوظة — منصة الفيديوهات الرسمية</p>
+  <div class="company">🏢 شركة مالكة: <b>N7R</b></div>
+</footer>
+
+<!-- ================= ADMIN MODAL ================= -->
+<div class="modal" id="adminModal">
+  <div class="modal-box wide" id="adminBox">
+    <button class="close-x" onclick="closeAdmin()">✕</button>
+
+    <!-- LOGIN VIEW -->
+    <div id="loginView">
+      <div class="modal-head">
+        <div class="ic">🔒</div>
+        <h2>دخول الأدمن</h2>
+        <p>مخصص فقط لمسؤول المنصة — تحالف MBS 82</p>
+      </div>
+      <div class="field">
+        <label>كلمة المرور</label>
+        <input type="password" class="input" id="passInput" placeholder="••••••••"
+               onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="btn-submit" onclick="doLogin()">دخول آمن</button>
+      <p style="text-align:center;color:#555;font-size:.76rem;margin-top:16px">
+        كلمة المرور الافتراضية: <b style="color:#888">admin123</b>
+      </p>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="dashView" style="display:none">
+      <div class="admin-bar">
+        <h2>⚙️ لوحة التحكم</h2>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="pill">أدمن — MBS 82</span>
+          <button class="btn btn-ghost" onclick="doLogout()">خروج</button>
+        </div>
+      </div>
+
+      <form id="addForm" onsubmit="handleAdd(event)">
+        <div class="field">
+          <label>عنوان الفيديو <span class="req">*</span></label>
+          <input type="text" class="input" id="fTitle" placeholder="مثال: أفضل لقطات 2025" required>
+        </div>
+
+        <div class="field">
+          <label>الوصف</label>
+          <textarea class="textarea" id="fDesc" placeholder="وصف مختصر للفيديو..."></textarea>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>التصنيف</label>
+            <input type="text" class="input" id="fCat" placeholder="أفلام، رياضة، تعليم..." list="catList">
+            <datalist id="catList"></datalist>
+          </div>
+          <div class="field">
+            <label>اسم الملف عند التحميل</label>
+            <input type="text" class="input" id="fFile" placeholder="video.mp4">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>رابط الصورة المصغّرة (اختياري)</label>
+          <input type="url" class="input" id="fThumb" placeholder="https://example.com/thumb.jpg">
+        </div>
+
+        <div class="field">
+          <label>مصدر الفيديو <span class="req">*</span></label>
+          <div class="tabs">
+            <button type="button" class="tab active" id="tabUrl" onclick="setMode('url')">🔗 رابط مباشر</button>
+            <button type="button" class="tab" id="tabFile" onclick="setMode('file')">📁 رفع ملف</button>
+          </div>
+
+          <div id="urlBox">
+            <input type="url" class="input" id="fUrl" placeholder="https://example.com/video.mp4">
+          </div>
+
+          <div id="fileBox" style="display:none">
+            <div class="file-drop" id="fileDrop">
+              <div class="ico">📤</div>
+              <b>اسحب الملف هنا أو اضغط للاختيار</b>
+              <small>MP4, WebM, MKV — الحد الأقصى 200MB</small>
+              <div class="file-name" id="fileName"></div>
+            </div>
+            <input type="file" id="fVideo" accept="video/*" hidden>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">➕ نشر الفيديو</button>
+      </form>
+
+      <hr style="border:none;border-top:1px solid var(--border);margin:30px 0 20px">
+
+      <div class="admin-bar" style="margin-bottom:14px">
+        <h2 style="font-size:1.05rem">📋 الفيديوهات المنشورة</h2>
+        <span class="pill" id="countPill">0</span>
+      </div>
+      <div class="mini-list" id="adminList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PLAYER MODAL ================= -->
+<div class="modal" id="playerModal">
+  <div class="player-box">
+    <button class="close-x" onclick="closePlayer()" style="inset-inline-end:16px;top:16px;z-index:5">✕</button>
+    <video id="playerVideo" controls playsinline></video>
+    <div class="player-info">
+      <h3 id="playerTitle"></h3>
+      <p id="playerDesc"></p>
+      <button class="btn btn-dl" style="width:100%" id="playerDl">⬇ تحميل الفيديو</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= TOASTS ================= -->
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* =========================================================
+   MBS 82 ALLIANCE — Owner: N7R
+   ========================================================= */
+
+const ADMIN_PASSWORD = 'admin123';
+const DB_NAME = 'mbs82_db';
+const COMPANY = 'N7R';
+
+let videos = [];
+let isAdmin = false;
+let mode = 'url';
+let pendingFile = null;
+let db = null;
+
+/* ---------- IndexedDB ---------- */
+function openDB(){
+  return new Promise((res, rej)=>{
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = () => {
+      if(!req.result.objectStoreNames.contains('store'))
+        req.result.createObjectStore('store');
+    };
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+function dbGet(k){
+  return new Promise((res, rej)=>{
+    const tx = db.transaction('store','readonly');
+    const r = tx.objectStore('store').get(k);
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+function dbSet(k, v){
+  return new Promise((res, rej)=>{
+    const tx = db.transaction('store','readwrite');
+    const r = tx.objectStore('store').put(v, k);
+    r.onsuccess = () => res();
+    r.onerror = () => rej(r.error);
+  });
+}
+
+/* ---------- Utils ---------- */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+
+function fmtDate(ts){
+  try{ return new Date(ts).toLocaleDateString('ar-EG',{year:'numeric',month:'short',day:'numeric'}); }
+  catch(e){ return ''; }
+}
+function fmtSize(b){
+  if(!b) return '';
+  const u = ['B','KB','MB','GB'];
+  let i = 0;
+  while(b >= 1024 && i < u.length-1){ b/=1024; i++; }
+  return b.toFixed(i?1:0) + ' ' + u[i];
+}
+function extFromUrl(url){
+  try{
+    const p = new URL(url, location.href).pathname;
+    const m = p.match(/\.(mp4|webm|mkv|mov|avi|m4v|ogg)$/i);
+    return m ? '.' + m[1].toLowerCase() : '.mp4';
+  }catch(e){ return '.mp4'; }
+}
+
+function toast(msg, type=''){
+  const box = document.getElementById('toasts');
+  const el = document.createElement('div');
+  el.className = 'toast ' + (type === 'success' ? 'ok' : type === 'error' ? 'err' : '');
+  el.textContent = msg;
+  box.appendChild(el);
+  setTimeout(()=>{
+    el.style.transition = '.35s';
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(-30px)';
+    setTimeout(()=>el.remove(), 350);
+  }, 2900);
+}
+
+/* ---------- Init ---------- */
+async function init(){
+  try{
+    db = await openDB();
+    videos = (await dbGet('videos')) || [];
+  }catch(e){
+    console.warn('IndexedDB غير متاح', e);
+    videos = [];
+  }
+
+  if(videos.length === 0){
+    videos = [
+      {
+        id: uid(),
+        title: 'Big Buck Bunny — فيلم رسوم متحركة قصير',
+        desc: 'فيلم قصير مذهل من إنتاج Blender Foundation بجودة عالية، مناسب لجميع الأعمار.',
+        cat: 'رسوم متحركة',
+        thumb: '',
+        src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        filename: 'Big-Buck-Bunny.mp4',
+        date: Date.now() - 86400000 * 3,
+        downloads: 42
+      },
+      {
+        id: uid(),
+        title: 'Elephants Dream — تجربة بصرية سينمائية',
+        desc: 'أول فيلم مفتوح المصدر في العالم، إخراج باسي هامبورغ. جودة سينمائية رائعة.',
+        cat: 'أفلام',
+        thumb: '',
+        src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        filename: 'Elephants-Dream.mp4',
+        date: Date.now() - 86400000 * 7,
+        downloads: 18
+      },
+      {
+        id: uid(),
+        title: 'For Bigger Blazes — مقطع إعلاني',
+        desc: 'مقطع قصير عالي الدقة، مثالي لاختبار جودة التشغيل والتحميل.',
+        cat: 'مقاطع قصيرة',
+        thumb: '',
+        src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+        filename: 'For-Bigger-Blazes.mp4',
+        date: Date.now() - 86400000 * 1,
+        downloads: 7
+      }
+    ];
+    await persist();
+  }
+
+  buildCategoryFilter();
+  render();
+  updateStats();
+}
+
+async function persist(){
+  try{ await dbSet('videos', videos); }
+  catch(e){ console.warn('فشل الحفظ', e); }
+}
+
+/* ---------- Render ---------- */
+function buildCategoryFilter(){
+  const cats = [...new Set(videos.map(v => v.cat).filter(Boolean))];
+  const sel = document.getElementById('catFilter');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">كل التصنيفات</option>' +
+    cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  sel.value = cur;
+
+  const dl = document.getElementById('catList');
+  dl.innerHTML = cats.map(c => `<option value="${esc(c)}">`).join('');
+}
+
+function render(){
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const cat = document.getElementById('catFilter').value;
+
+  let list = videos.slice().sort((a,b) => b.date - a.date);
+
+  if(q) list = list.filter(v =>
+    (v.title||'').toLowerCase().includes(q) ||
+    (v.desc||'').toLowerCase().includes(q) ||
+    (v.cat||'').toLowerCase().includes(q));
+
+  if(cat) list = list.filter(v => v.cat === cat);
+
+  if(list.length === 0){
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    empty.querySelector('h3').textContent = q || cat ? 'لا توجد نتائج مطابقة' : 'لا توجد فيديوهات بعد';
+    empty.querySelector('p').textContent = q || cat ? 'جرّب كلمة بحث أخرى أو غيّر التصنيف' : 'سيتم نشر المحتوى قريباً من قِبل الأدمن';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = list.map((v, i) => {
+    const thumb = v.thumb
+      ? `<img src="${esc(v.thumb)}" alt="${esc(v.title)}" loading="lazy"
+             onerror="this.style.display='none'">`
+      : `<div class="ph">🎬</div>`;
+
+    return `
+      <article class="card" style="animation-delay:${i * 0.05}s">
+        <div class="thumb" onclick="openPlayer('${v.id}')">
+          ${thumb}
+          ${v.cat ? `<span class="cat-tag">${esc(v.cat)}</span>` : ''}
+          <button class="play-badge" aria-label="تشغيل">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+        <div class="card-body">
+          <h3>${esc(v.title)}</h3>
+          <p>${esc(v.desc || 'لا يوجد وصف لهذا الفيديو.')}</p>
+          <div class="meta">
+            <span>📅 ${fmtDate(v.date)}</span>
+            <span>⬇ ${v.downloads || 0}</span>
+          </div>
+          <div class="actions">
+            <button class="btn btn-dl" onclick="downloadVideo('${v.id}')">⬇ تحميل</button>
+            <button class="btn btn-ghost" onclick="openPlayer('${v.id}')">👁 مشاهدة</button>
+            ${isAdmin ? `<button class="btn btn-del" onclick="deleteVideo('${v.id}')" title="حذف">🗑</button>` : ''}
+          </div>
+        </div>
+      </article>`;
+  }).join('');
+}
+
+function updateStats(){
+  document.getElementById('statVideos').textContent = videos.length;
+  const total = videos.reduce((s,v) => s + (v.downloads || 0), 0);
+  document.getElementById('statDownloads').textContent = total;
+  document.getElementById('countPill').textContent = videos.length + ' فيديو';
+}
+
+/* ---------- Download ---------- */
+async function downloadVideo(id){
+  const v = videos.find(x => x.id === id);
+  if(!v) return;
+
+  const filename = v.filename || (v.title.replace(/[\\/:*?"<>|]/g,'_') + extFromUrl(v.src));
+  toast('⏳ جاري تجهيز الملف...');
+
+  try{
+    const res = await fetch(v.src);
+    if(!res.ok) throw new Error('fetch failed');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 8000);
+    toast('✅ تم بدء التحميل', 'success');
+  }catch(err){
+    const a = document.createElement('a');
+    a.href = v.src;
+    a.download = filename;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    toast('✅ تم بدء التحميل', 'success');
+  }
+
+  v.downloads = (v.downloads || 0) + 1;
+  await persist();
+  render();
+  updateStats();
+}
+
+/* ---------- Player ---------- */
+function openPlayer(id){
+  const v = videos.find(x => x.id === id);
+  if(!v) return;
+
+  const modal = document.getElementById('playerModal');
+  const vid = document.getElementById('playerVideo');
+  vid.src = v.src;
+  document.getElementById('playerTitle').textContent = v.title;
+  document.getElementById('playerDesc').textContent = v.desc || '';
+  document.getElementById('playerDl').onclick = () => downloadVideo(id);
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  vid.play().catch(()=>{});
+}
+function closePlayer(){
+  const modal = document.getElementById('playerModal');
+  const vid = document.getElementById('playerVideo');
+  vid.pause();
+  vid.removeAttribute('src');
+  vid.load();
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ---------- Admin ---------- */
+function openAdmin(){
+  const modal = document.getElementById('adminModal');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  if(isAdmin){
+    document.getElementById('loginView').style.display = 'none';
+    document.getElementById('dashView').style.display = 'block';
+    renderAdminList();
+  }else{
+    document.getElementById('loginView').style.display = 'block';
+    document.getElementById('dashView').style.display = 'none';
+    setTimeout(()=>document.getElementById('passInput').focus(), 100);
+  }
+}
+function closeAdmin(){
+  document.getElementById('adminModal').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('passInput').value = '';
+}
+
+function doLogin(){
+  const val = document.getElementById('passInput').value;
+  if(val === ADMIN_PASSWORD){
+    isAdmin = true;
+    document.getElementById('adminBtnText').textContent = 'لوحة التحكم';
+    document.getElementById('adminBtn').classList.add('on');
+    document.getElementById('loginView').style.display = 'none';
+    document.getElementById('dashView').style.display = 'block';
+    renderAdminList();
+    render();
+    toast('✅ مرحباً بك في لوحة تحالف MBS 82', 'success');
+  }else{
+    toast('❌ كلمة المرور غير صحيحة', 'error');
+    document.getElementById('passInput').value = '';
+    document.getElementById('passInput').focus();
+  }
+}
+
+function doLogout(){
+  isAdmin = false;
+  document.getElementById('adminBtnText').textContent = 'لوحة الأدمن';
+  document.getElementById('adminBtn').classList.remove('on');
+  closeAdmin();
+  render();
+  toast('تم تسجيل الخروج');
+}
+
+function renderAdminList(){
+  const box = document.getElementById('adminList');
+  if(videos.length === 0){
+    box.innerHTML = '<p style="color:#666;font-size:.85rem;text-align:center;padding:20px">لا توجد فيديوهات منشورة</p>';
+    document.getElementById('countPill').textContent = '0 فيديو';
+    return;
+  }
+  box.innerHTML = videos.slice().sort((a,b)=>b.date-a.date).map(v => `
+    <div class="mini">
+      ${v.thumb
+        ? `<img class="mthumb" src="${esc(v.thumb)}" alt="" onerror="this.outerHTML='<div class=\\'mthumb\\'>🎬</div>'">`
+        : `<div class="mthumb">🎬</div>`}
+      <div class="info">
+        <b>${esc(v.title)}</b>
+        <small>${esc(v.cat || 'بدون تصنيف')} • ⬇ ${v.downloads||0} • ${fmtDate(v.date)}</small>
+      </div>
+      <button class="del" onclick="deleteVideo('${v.id}')" title="حذف">🗑</button>
+    </div>
+  `).join('');
+  document.getElementById('countPill').textContent = videos.length + ' فيديو';
+}
+
+/* ---------- Mode ---------- */
+function setMode(m){
+  mode = m;
+  document.getElementById('tabUrl').classList.toggle('active', m === 'url');
+  document.getElementById('tabFile').classList.toggle('active', m === 'file');
+  document.getElementById('urlBox').style.display = m === 'url' ? 'block' : 'none';
+  document.getElementById('fileBox').style.display = m === 'file' ? 'block' : 'none';
+}
+
+/* ---------- File ---------- */
+const fileDrop = document.getElementById('fileDrop');
+const fileInput = document.getElementById('fVideo');
+
+fileDrop.addEventListener('click', () => fileInput.click());
+fileDrop.addEventListener('dragover', e => { e.preventDefault(); fileDrop.classList.add('drag'); });
+fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('drag'));
+fileDrop.addEventListener('drop', e => {
+  e.preventDefault();
+  fileDrop.classList.remove('drag');
+  if(e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', e => {
+  if(e.target.files.length) handleFile(e.target.files[0]);
+});
+
+function handleFile(file){
+  if(!file.type.startsWith('video/')){
+    toast('❌ الرجاء اختيار ملف فيديو صالح', 'error');
+    return;
+  }
+  const MAX = 200 * 1024 * 1024;
+  if(file.size > MAX){
+    toast('❌ حجم الملف كبير جداً (الحد 200MB)', 'error');
+    return;
+  }
+
+  toast('⏳ جاري قراءة الملف...');
+  const reader = new FileReader();
+  reader.onload = e => {
+    pendingFile = { dataUrl: e.target.result, name: file.name, size: file.size };
+    document.getElementById('fileName').textContent =
+      `✅ ${file.name} (${fmtSize(file.size)})`;
+    if(!document.getElementById('fFile').value){
+      document.getElementById('fFile').value = file.name;
+    }
+    if(!document.getElementById('fTitle').value){
+      document.getElementById('fTitle').value = file.name.replace(/\.[^.]+$/, '');
+    }
+    toast('✅ تم تحميل الملف', 'success');
+  };
+  reader.onerror = () => toast('❌ فشل قراءة الملف', 'error');
+  reader.readAsDataURL(file);
+}
+
+/* ---------- Add ---------- */
+async function handleAdd(e){
+  e.preventDefault();
+
+  const title = document.getElementById('fTitle').value.trim();
+  const desc  = document.getElementById('fDesc').value.trim();
+  const cat   = document.getElementById('fCat').value.trim();
+  const thumb = document.getElementById('fThumb').value.trim();
+  let   fname = document.getElementById('fFile').value.trim();
+
+  if(!title){ toast('❌ أدخل عنوان الفيديو', 'error'); return; }
+
+  let src = '';
+  if(mode === 'url'){
+    src = document.getElementById('fUrl').value.trim();
+    if(!src){ toast('❌ أدخل رابط الفيديو', 'error'); return; }
+    if(!fname) fname = title.replace(/[\\/:*?"<>|]/g,'_') + extFromUrl(src);
+  }else{
+    if(!pendingFile){ toast('❌ اختر ملف فيديو أولاً', 'error'); return; }
+    src = pendingFile.dataUrl;
+    if(!fname) fname = pendingFile.name;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري النشر...';
+
+  videos.push({
+    id: uid(),
+    title, desc, cat, thumb,
+    src,
+    filename: fname,
+    date: Date.now(),
+    downloads: 0
+  });
+
+  await persist();
+
+  document.getElementById('addForm').reset();
+  pendingFile = null;
+  document.getElementById('fileName').textContent = '';
+  setMode('url');
+
+  btn.disabled = false;
+  btn.textContent = '➕ نشر الفيديو';
+
+  buildCategoryFilter();
+  render();
+  updateStats();
+  renderAdminList();
+  toast('✅ تم نشر الفيديو بنجاح', 'success');
+}
+
+/* ---------- Delete ---------- */
+async function deleteVideo(id){
+  const v = videos.find(x => x.id === id);
+  if(!v) return;
+  if(!isAdmin){ toast('❌ غير مصرح لك بالحذف', 'error'); return; }
+  if(!confirm(`هل تريد حذف الفيديو:\n"${v.title}" ؟`)) return;
+
+  videos = videos.filter(x => x.id !== id);
+  await persist();
+  buildCategoryFilter();
+  render();
+  updateStats();
+  renderAdminList();
+  toast('🗑 تم حذف الفيديو', 'success');
+}
+
+/* ---------- Misc ---------- */
+function scrollToFooter(e){
+  e.preventDefault();
+  document.getElementById('footer').scrollIntoView({behavior:'smooth'});
+}
+
+document.querySelectorAll('.modal').forEach(m => {
+  m.addEventListener('click', e => {
+    if(e.target === m){
+      if(m.id === 'playerModal') closePlayer();
+      else closeAdmin();
+    }
+  });
+});
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    if(document.getElementById('playerModal').classList.contains('open')) closePlayer();
+    else if(document.getElementById('adminModal').classList.contains('open')) closeAdmin();
+  }
+});
+
+init();
+</script>
+</body>
+</html>
